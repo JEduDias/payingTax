@@ -1,26 +1,55 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+
+import entities.LegalEntities;
+import entities.NaturalPerson;
+import entities.Taxpayer;
 
 public class Program {
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
 		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
 		
-		
-		System.out.println("Enter the number of tax payers:");
+
+		List<Taxpayer> list = new ArrayList<>();
+
+		System.out.print("Enter the number of tax payers:");
 		int N = sc.nextInt();
-		for (int i=0; i<N; i++) {
-		System.out.println("Tax payer #1 data:");
+		
+		for (int i = 1; i <= N; i++) {
+			System.out.println("Tax payer " + i + " data:");
+			System.out.print("Individual or company (i/c)?");
+			char type = sc.next().charAt(0);
+			sc.nextLine();
+			System.out.print("Name: ");
+			String name = sc.nextLine();
+			System.out.print("Anual income: ");
+			Double income = sc.nextDouble();
+			if (type == 'i') {
+				System.out.print("Health expenditures: ");
+				Double healthSpending = sc.nextDouble();
+				list.add(new NaturalPerson(name, income, healthSpending));
+			} else if (type == 'c') {
+				System.out.print("Number of employees: ");
+				Integer numEmployees = sc.nextInt();
+				list.add(new LegalEntities(name, income, numEmployees));
+			}
+
 		}
-
-
-		
-		
-		
-		
+		Double sum = 0.0;
+		System.out.println();
+		System.out.println("TAXES PAID:");
+		for (Taxpayer tp : list) {
+			System.out.println(tp);
+			sum += tp.payTax();
+		}
+		System.out.println();
+		System.out.printf("TOTAL TAXES: $ %.2f", sum);
 		
 		sc.close();
 	}
